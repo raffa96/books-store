@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../../css/pages/login.css";
-
+import LoginService from "../../services/LoginService";
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -8,8 +8,47 @@ class Login extends Component {
     this.state = {
       email: "",
       password: "",
+      token: "",
+      showSuccess: false,
+      showError: false,
+      successMessage: "",
+      errorMessage: "",
     };
+
+    this.LoginService = new LoginService();
   }
+
+  getSuccessMessage = () => {
+    if (this.state.successMessage) {
+      return (
+        <div className="row mt-3">
+          <div className="col-sm-12 col-md-6 mx-auto">
+            <div className="alert alert-success" role="alert">
+              <p className="lead">{this.state.successMessage}</p>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  getErrorMessage = () => {
+    if (this.state.errorMessage) {
+      return (
+        <div className="row mt-3">
+          <div className="col-sm-12 col-md-6 mx-auto">
+            <div className="alert alert-danger" role="alert">
+              <p className="lead">{this.state.errorMessage}</p>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
 
   changeInput = (e) => {
     let inputName = e.target.name;
@@ -43,15 +82,40 @@ class Login extends Component {
     return true;
   };
 
+  loginSuccess = (response) => {
+    this.setState({
+      token: response.token,
+      showSuccess: true,
+      successMessage: "Login effettuato con successo!",
+      showError: false,
+      errorMessage: "",
+    });
+
+    setInterval(this.props.history.push("/books"), 3000);
+  };
+
+  loginError = (error) => {
+    this.setState({
+      token: "",
+      showSuccess: false,
+      successMessage: "",
+      showError: true,
+      errorMessage: "Login fallito! Errore: " + error.error,
+    });
+  };
+
   login = () => {
     let validEmail = this.validateEmail(this.state.email);
 
     let validPassword = this.validatePassword(this.state.password);
 
     if (validEmail && validPassword) {
-      console.log("Email:", this.state.email);
-
-      console.log("Password:", this.state.password);
+      this.LoginService.login(
+        this.state.email,
+        this.state.password,
+        this.loginSuccess,
+        this.loginError
+      );
     }
   };
 
@@ -62,6 +126,10 @@ class Login extends Component {
   };
 
   render() {
+    let successMessage = this.getSuccessMessage();
+
+    let errorMessage = this.getErrorMessage();
+
     return (
       <div className="app__main__login">
         <h1 className="text-center mb-3">
@@ -113,6 +181,10 @@ class Login extends Component {
               </form>
             </div>
           </div>
+
+          {this.state.showSuccess ? successMessage : ""}
+
+          {this.state.showError ? errorMessage : ""}
         </div>
       </div>
     );
