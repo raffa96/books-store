@@ -1,0 +1,10 @@
+.app__footer {
+  text-align: center;
+  padding: 3rem;
+  color: #fff;
+}
+
+.app__footer .social {
+  color: #fff;
+  padding: 1rem;
+}

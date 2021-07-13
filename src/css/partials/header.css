@@ -1,0 +1,48 @@
+.app__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  color: #fff;
+}
+
+.app__header a {
+  text-decoration: none;
+  color: #fff;
+}
+
+.app__header__logo img {
+  width: 3rem;
+  height: 3rem;
+}
+
+.app__header__nav__menu__item {
+  display: inline-block;
+}
+
+.app__header__nav__menu__item a {
+  padding: 1rem;
+  display: block;
+}
+
+/* ! Media Queries */
+@media screen and (max-width: 768px) {
+  .app__header {
+    display: block;
+    text-align: center;
+  }
+
+  .app__header__logo img {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .app__header__nav {
+    margin-top: 1rem;
+  }
+
+  .app__header__nav__menu {
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
